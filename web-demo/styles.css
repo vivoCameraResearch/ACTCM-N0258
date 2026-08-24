@@ -1,0 +1,207 @@
+/* gainCurve Web UI — 深色主题 */
+:root {
+  --bg: #0e0f13;
+  --bg-elev: #16181f;
+  --bg-elev2: #1d2029;
+  --border: #2a2e3a;
+  --text: #e6e8ee;
+  --text-dim: #8b90a0;
+  --accent: #4d9fff;
+  --accent2: #b06bff;
+  --warn: #ff5d5d;
+  --ok: #3a8;
+  --radius: 10px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ---- 顶栏 ---- */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.brand h1 { font-size: 18px; font-weight: 600; letter-spacing: 0.5px; }
+.brand .subtitle { color: var(--text-dim); font-size: 11px; margin-left: 8px; }
+.controls { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.ctrl { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.ctrl > span:first-child { color: var(--text-dim); }
+.ctrl .val { color: var(--text); font-family: ui-monospace, monospace; min-width: 56px; }
+.ctrl.toggle { cursor: pointer; }
+.ctrl.toggle input { accent-color: var(--accent); }
+
+input[type=range] {
+  -webkit-appearance: none; appearance: none;
+  width: 110px; height: 4px; background: var(--bg-elev2); border-radius: 2px; outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent); cursor: pointer; border: 2px solid var(--bg-elev);
+}
+select {
+  background: var(--bg-elev2); color: var(--text); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 8px; font-size: 12px; outline: none;
+}
+button {
+  background: var(--accent); color: #fff; border: none; border-radius: 6px;
+  padding: 6px 14px; font-size: 12px; cursor: pointer; font-weight: 500;
+  transition: opacity 0.15s;
+}
+button:hover { opacity: 0.85; }
+
+/* ---- 三视图 ---- */
+.viewport {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 12px;
+  padding: 12px 16px;
+  flex: 1 1 auto;
+  min-height: 480px; /* 上方预览区优先占高 */
+}
+.canvas-cell {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow);
+}
+.canvas-cell.primary { border-color: var(--accent); }
+.canvas-cell canvas {
+  /* 不 flex 拉伸: 尺寸仅由 JS 按图像原比例设置, 在 cell 内居中 */
+  flex: 0 0 auto;
+  align-self: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  display: block;
+  background: #000;
+}
+.canvas-label {
+  padding: 8px 12px; font-size: 12px; font-weight: 600;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.canvas-label .hint { color: var(--text-dim); font-weight: 400; font-size: 11px; }
+
+/* ---- 下半区: 编辑器 (+ 可展开指标) ---- */
+.lower {
+  display: grid;
+  grid-template-columns: 1fr 0fr;
+  gap: 0;
+  padding: 0 16px 12px;
+  flex: 0 0 auto;
+  min-height: 0;
+  transition: grid-template-columns 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+              gap 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.lower.metrics-open {
+  grid-template-columns: 1fr minmax(280px, 0.9fr);
+  gap: 12px;
+}
+.editors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  min-width: 0;
+}
+.editor-block {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px;
+  display: flex; flex-direction: column;
+  min-height: 0;
+}
+.editor-title {
+  font-size: 12px; font-weight: 600; margin-bottom: 6px;
+  display: flex; justify-content: space-between;
+}
+.editor-title .hint { color: var(--text-dim); font-weight: 400; font-size: 11px; }
+.reset-btn {
+  background: var(--bg-elev2); color: var(--text-dim); border: 1px solid var(--border);
+  border-radius: 5px; padding: 2px 10px; font-size: 11px; font-weight: 500; cursor: pointer;
+}
+.reset-btn:hover { color: var(--text); border-color: var(--accent); }
+.curve-editor {
+  width: 100%; height: 140px; min-height: 140px; flex: 0 0 auto;
+  cursor: crosshair;
+  border-radius: 6px; background: #0a0b0e;
+}
+.lower.metrics-open .curve-editor { height: 140px; min-height: 140px; }
+
+.metrics-panel {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  overflow: hidden;
+  min-width: 0;
+  opacity: 0;
+  transform: translateX(12px);
+  pointer-events: none;
+  transition: opacity 0.28s ease, transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.lower.metrics-open .metrics-panel {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+#metrics-btn[aria-pressed="true"] {
+  background: var(--accent2);
+}
+.metrics-title { font-size: 12px; font-weight: 600; margin-bottom: 8px; display: flex; justify-content: space-between; }
+.metrics-title .hint { color: var(--text-dim); font-weight: 400; font-size: 11px; }
+#metrics-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+#metrics-table th, #metrics-table td {
+  padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--border);
+}
+#metrics-table th { color: var(--text-dim); font-weight: 500; text-align: right; }
+#metrics-table td:first-child, #metrics-table th:first-child { text-align: left; }
+#metrics-table tbody tr:hover { background: var(--bg-elev2); }
+.metrics-note { color: var(--text-dim); font-size: 11px; margin-top: 8px; font-family: ui-monospace, monospace; }
+
+/* ---- toast ---- */
+.toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--bg-elev2); color: var(--text); border: 1px solid var(--border);
+  padding: 10px 18px; border-radius: 8px; box-shadow: var(--shadow);
+  opacity: 0; pointer-events: none; transition: all 0.25s; z-index: 100; font-size: 13px;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---- 响应式 ---- */
+@media (max-width: 900px) {
+  /* 窄屏堆叠为单列 3 行; grid-template-rows:1fr (桌面单行填满) 在此场景不适用,
+     改用 grid-auto-rows 固定每行高度, 否则隐式行会按内容 auto 收缩到 0 */
+  .viewport { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-rows: 260px; }
+  .lower, .lower.metrics-open { grid-template-columns: 1fr; gap: 12px; }
+  .editors { grid-template-columns: 1fr; }
+  .metrics-panel {
+    max-height: 0; padding-top: 0; padding-bottom: 0; border-width: 0;
+    transform: translateY(-8px);
+    transition: max-height 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.28s ease, transform 0.38s ease, padding 0.38s ease;
+  }
+  .lower.metrics-open .metrics-panel {
+    max-height: 320px; padding: 12px; border-width: 1px;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>gainCurve — UWA Gain Curve + CCM Demo</title>
+<link rel="stylesheet" href="styles.css">
+<!-- bundled entry -->
+<script src="sample-embedded.js"></script>
+<script src="uwa-color/uwa-transfer.js"></script>
+<script src="uwa-color/uwa-chromaticity.js"></script>
+<script src="uwa-color/uwa-hermite-curve.js"></script>
+<script src="uwa-color/uwa-headroom-adapt.js"></script>
+<script src="uwa-color/uwa-tonemap-gl.js"></script>
+<script src="app.js"></script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <h1>gainCurve</h1>
+    <span class="subtitle">UWA N0258 · Gain Curve + CCM · HDR→SDR</span>
+  </div>
+  <div class="controls">
+    <label class="ctrl">
+      <span>Target Headroom</span>
+      <input type="range" id="target-headroom" min="0" max="271" step="1" value="0">
+      <span class="val" id="target-headroom-val">0.00</span>
+    </label>
+    <label class="ctrl">
+      <span>Perception</span>
+      <select id="perception-mode">
+        <option value="0">PQ</option>
+        <option value="1">Gamma</option>
+        <option value="2">Log2</option>
+        <option value="3">Linear</option>
+      </select>
+    </label>
+    <label class="ctrl toggle">
+      <input type="checkbox" id="coupled-toggle">
+      <span>Target = 2094-50 法</span>
+    </label>
+    <button id="upload-btn">上传图像</button>
+    <button id="save-btn">保存 Target</button>
+    <button id="metrics-btn" type="button" aria-pressed="false">统计</button>
+    <input type="file" id="file-input" accept="image/*" hidden>
+  </div>
+</header>
+
+<main class="viewport">
+  <div class="canvas-cell">
+    <canvas id="base-canvas"></canvas>
+    <div class="canvas-label">Base <span class="hint">输入 · baseline headroom</span></div>
+  </div>
+  <div class="canvas-cell primary">
+    <canvas id="target-canvas"></canvas>
+    <div class="canvas-label">Target <span class="hint">色调映射 + 退白</span></div>
+  </div>
+  <div class="canvas-cell">
+    <canvas id="alt-canvas"></canvas>
+    <div class="canvas-label">Alternate <span class="hint">Gain Curve · 步骤一</span></div>
+  </div>
+</main>
+
+<section class="lower">
+  <div class="editors">
+    <div class="editor-block">
+      <div class="editor-title">
+        <span>Gain Curve <span class="hint">x=f_common · y=log₂增益</span></span>
+        <button id="gain-reset-btn" class="reset-btn" type="button">重置</button>
+      </div>
+      <canvas id="gain-editor" class="curve-editor"></canvas>
+    </div>
+    <div class="editor-block">
+      <div class="editor-title">
+        <span>Saturation Curve <span class="hint">x=f_common · y=退白 S</span></span>
+        <button id="sat-reset-btn" class="reset-btn" type="button">重置</button>
+      </div>
+      <canvas id="sat-editor" class="curve-editor"></canvas>
+    </div>
+  </div>
+  <aside class="metrics-panel" id="metrics-panel" aria-hidden="true">
+    <div class="metrics-title">指标 <span class="hint">基于真实图像内容的色度加权平均</span></div>
+    <table id="metrics-table">
+      <thead><tr><th>方法</th><th>对比</th><th>ΔH° (色相偏移)</th><th>亮度漂移</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="metrics-note" id="metrics-note"></div>
+  </aside>
+</section>
+
+<div id="toast" class="toast"></div>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+UWA N0258 — Gain Curve + CCM 轻量化动态元数据参考实现
+Copyright 2025-2026 维沃移动通信有限公司 (vivo Mobile Communication Co., Ltd.)
+
+本产品包含由维沃移动通信有限公司开发的软件。
+This product includes software developed by vivo Mobile Communication Co., Ltd.
+
+本软件依据 Apache License, Version 2.0 授权，许可全文见同目录 LICENSE 文件。
+Licensed under the Apache License, Version 2.0; see the LICENSE file in this
+directory for the full license text.
+
+--------------------------------------------------------------------------------
+标准与规范引用 (Normative references)
+--------------------------------------------------------------------------------
+
+本仓库的算法实现依据以下公开标准与规范文本，相关标准文本本身的著作权归各自
+标准化组织所有，本仓库不包含任何标准文本的复制件：
+
+  * SMPTE ST 2094-50:2016  Dynamic Metadata for Color Volume Transform
+                           — Application #50
+    （Gain Curve 模型、Component Mixing、Headroom 自适应插值、
+      附录 C.3.9 单调保形斜率）
+  * SMPTE ST 2084:2014     High Dynamic Range EOTF of Mastering Reference
+                           Displays（PQ 传递函数常数 m1/m2/c1/c2/c3）
+  * ITU-R BT.2100-2        Image parameter values for HDR television
+  * ITU-R BT.2408          Operational practices in HDR television production
+                           （HDR 参考白 203 cd/m²）
+  * ITU-R BT.709-6         Parameter values for the HDTV standards
+  * ITU-R BT.2020-2        Parameter values for UHDTV systems
+  * IEC 61966-2-1          sRGB 色度坐标与传递函数
+  * SMPTE EG 432-1         Display-P3 原色与白点色度坐标
+
+--------------------------------------------------------------------------------
+第三方组件 (Third-party components)
+--------------------------------------------------------------------------------
+
+本仓库的源代码不包含第三方源码。
+
+web-demo 的可选构建步骤会通过 npx 临时调用 esbuild 进行打包；esbuild 依 MIT
+许可发布，仅作为构建期工具使用，不随本仓库分发，也不进入构建产物。
+
+web-demo 附带的示例图像 data/test.avif 为本项目自有测试素材，仅用于演示与算法
+验证目的。

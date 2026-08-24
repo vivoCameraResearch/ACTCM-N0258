@@ -1,0 +1,6 @@
+本仓库代码涉及的专利授权，以 LICENSE（Apache License, Version 2.0）第 3 条
+"Grant of Patent License" 为准。
+
+The patent grant applicable to the code in this repository is governed by
+Section 3 ("Grant of Patent License") of the LICENSE (Apache License,
+Version 2.0).
